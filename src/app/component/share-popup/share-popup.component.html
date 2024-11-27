@@ -1,0 +1,30 @@
+<div class="share-card">
+    <h2>Share</h2>
+    <div class="chip-list">
+      @for (user of selectedUsers; track $index) {
+          <span class="chip">
+            {{ user }}
+            <button class="remove-chip" (click)="removeUser($index)">x</button>
+          </span>
+        }
+      <input
+        class="user-input"
+        placeholder="Add user"
+        [(ngModel)]="newUser"
+        (keydown.enter)="addUser()"
+        >
+    </div>
+  
+    <textarea
+      class="message-input"
+      placeholder="Add a message"
+      [(ngModel)]="message"
+      rows="2"
+    ></textarea>
+  
+    <div class="button-group">
+      <button class="btn" (click)="send()">Send</button>
+      <button class="btn">Copy link</button>
+    </div>
+  </div>
+  
