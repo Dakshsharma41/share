@@ -1,7 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { query } from 'express';
+import { map, Observable } from 'rxjs';
 
+
+export interface User {
+  id?: number;
+  name: string;
+  email?: string;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -11,9 +18,28 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-getUsers():Observable<any[]>{
- return this.http.get<any[]> (this.baseUrl);
-}
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.baseUrl).pipe(
+      map(users => {
+        // Optional: transform or filter the users if needed
+        return users.map(user => ({
+          id: user.id,
+          name: user.name  || 'Unknown',
+          email: user.email
+        }));
+      })
+    );
+  }
+
+  // Optional: Add other user-related methods like searchUsers, etc.
+  searchUsers(query: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/search`, {
+      params: { q: query }
+    });
+  }
+  }
 
 
-}
+
+
+

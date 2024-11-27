@@ -1,30 +1,48 @@
 <div class="share-card">
-    <h2>Share</h2>
-    <div class="chip-list">
-      @for (user of selectedUsers; track $index) {
-          <span class="chip">
-            {{ user }}
-            <button class="remove-chip" (click)="removeUser($index)">x</button>
-          </span>
+  <h2>Share</h2>
+  
+  <div class="chip-list">
+    @for (user of selectedUsers; track $index) {
+      <span class="chip">
+        {{ user }}
+        <button class="remove-chip" (click)="removeUser($index)">x</button>
+      </span>
+    }
+    
+    <input 
+      class="user-input"
+      placeholder="Add user"
+      [(ngModel)]="newUser"
+      (input)="onUserInput()"
+      (keydown.enter)="addUser()"
+    >
+    
+    @if (suggestedUsers.length > 0) {
+      <ul class="suggestions">
+        @for (suggestion of suggestedUsers; track suggestion) {
+          <li (click)="selectSuggestedUser(suggestion)">
+            {{ suggestion }}
+          </li>
         }
-      <input
-        class="user-input"
-        placeholder="Add user"
-        [(ngModel)]="newUser"
-        (keydown.enter)="addUser()"
-        >
-    </div>
-  
-    <textarea
-      class="message-input"
-      placeholder="Add a message"
-      [(ngModel)]="message"
-      rows="2"
-    ></textarea>
-  
-    <div class="button-group">
-      <button class="btn" (click)="send()">Send</button>
-      <button class="btn">Copy link</button>
-    </div>
+      </ul>
+    }
   </div>
-  
+
+  <textarea 
+    class="message-input"
+    placeholder="Add a message"
+    [(ngModel)]="message"
+    rows="2"
+  ></textarea>
+
+  <div class="button-group">
+    <button 
+      class="btn" 
+      (click)="send()" 
+      [disabled]="selectedUsers.length === 0"
+    >
+      Send
+    </button>
+ 
+  </div>
+</div>

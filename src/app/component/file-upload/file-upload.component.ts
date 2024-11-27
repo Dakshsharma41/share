@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../file.service';
-import { SharePopupComponent } from '../share-popup/share-popup.component';
+
 
 @Component({
   selector: 'app-file-upload',
