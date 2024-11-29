@@ -1,11 +1,11 @@
 
 .share-card {
-    width: 400px;
+    width: 300px;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     margin: auto;
-    margin-top: 50px;
+    /* margin-top: 50px; */
     background-color: #f9f9f9;
   }
   
@@ -79,3 +79,27 @@
     background-color: #0056b3;
   }
   
+   :host {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    max-width: 400px;
+    border-radius: 8px;
+  }
+  
+  h2 {
+    margin-bottom: 16px;
+  }
+  
+  /* .chip-list {
+    margin-bottom: 16px;
+  } */
+  
+  .button-group {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .btn {
+    margin-top: 16px;
+  }

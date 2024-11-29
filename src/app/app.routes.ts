@@ -10,8 +10,6 @@ export const routes: Routes = [
         path:'upload',
         component:FileUploadComponent
     },
-    {
-        path:'share',
-        component:SharePopupComponent
-    }
+    
+
 ];

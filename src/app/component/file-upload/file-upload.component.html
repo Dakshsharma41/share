@@ -25,7 +25,8 @@
             <!-- <td>{{ file.fileSize }}</td> -->
             <td><a [href]="file.downloadUrl" target="_blank">Download</a></td>
             <td>
-              <button (click)="openShareDialog(file)">::</button>
+              <button mat-button (click)="openSharePopup()">::</button>
+              
             </td>
           </tr>
         }

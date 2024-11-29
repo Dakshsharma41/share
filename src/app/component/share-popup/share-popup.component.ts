@@ -1,7 +1,8 @@
 import { UserService } from './../../user.service';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 
 
 
@@ -13,13 +14,19 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './share-popup.component.css'
 })
 export class SharePopupComponent implements OnInit {
+
+  
+
+  
+  
   selectedUsers: string[] = []; 
   newUser: string = '';
   message: string = ''; 
   suggestedUsers: string[] = [];
   allUsers: string[] = [];
 
-  constructor(private userService: UserService) {}
+  constructor(private dialogRef: MatDialogRef<SharePopupComponent>,
+    private userService: UserService) {}
 
   ngOnInit() {
     
@@ -79,4 +86,8 @@ export class SharePopupComponent implements OnInit {
     });
     alert('Shared successfully with: ' + this.selectedUsers.join(', '));
   }
+  close() {
+    this.dialogRef.close(); // Close without action
+  }
+
 }

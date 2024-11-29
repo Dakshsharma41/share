@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../file.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SharePopupComponent } from '../share-popup/share-popup.component';
 
 
 @Component({
@@ -12,6 +14,9 @@ import { FileService } from '../../file.service';
   styleUrl: './file-upload.component.css'
 })
 export class FileUploadComponent implements OnInit {
+
+
+
   selectedFile: File | null = null;
   fileList: any[] = [];
   errorMessage: string | null = null;
@@ -20,7 +25,9 @@ export class FileUploadComponent implements OnInit {
     this.fetchFiles();
   }
 
-  constructor(private fileService: FileService) {}
+  constructor(private fileService: FileService,
+    private dialog: MatDialog
+  ) {}
  
 
   onFileSelected(event: Event): void {
@@ -63,8 +70,14 @@ export class FileUploadComponent implements OnInit {
   }
 
 
-  openShareDialog(file: any) {
+  openSharePopup() {
+    const dialogRef = this.dialog.open(SharePopupComponent, {
+      width: '400px', 
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed', result);
+    });
   }
 }
 

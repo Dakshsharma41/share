@@ -21,7 +21,7 @@ export class UserService {
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.baseUrl).pipe(
       map(users => {
-        // Optional: transform or filter the users if needed
+        
         return users.map(user => ({
           id: user.id,
           name: user.name  || 'Unknown',
@@ -31,7 +31,7 @@ export class UserService {
     );
   }
 
-  // Optional: Add other user-related methods like searchUsers, etc.
+  
   searchUsers(query: string): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/search`, {
       params: { q: query }
