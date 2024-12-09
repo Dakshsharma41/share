@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { FileService } from '../../file.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,24 +10,20 @@ import { SharePopupComponent } from '../share-popup/share-popup.component';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './file-upload.component.html',
-  styleUrl: './file-upload.component.css'
+  styleUrl: './file-upload.component.css',
 })
 export class FileUploadComponent implements OnInit {
-
-
+  // @ViewChild(PopupComponent, { static: true }) popup!: PopupComponent
 
   selectedFile: File | null = null;
   fileList: any[] = [];
   errorMessage: string | null = null;
- 
+
   ngOnInit(): void {
     this.fetchFiles();
   }
 
-  constructor(private fileService: FileService,
-    private dialog: MatDialog
-  ) {}
- 
+  constructor(private fileService: FileService, private dialog: MatDialog) {}
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -45,12 +40,11 @@ export class FileUploadComponent implements OnInit {
           this.selectedFile = null;
           this.fetchFiles();
           // this.fileList = [response, ...this.fileList];
-          
         },
         error: (err) => {
           this.errorMessage = 'File upload failed.';
           console.error(err);
-        }
+        },
       });
     } else {
       alert('Please select a file to upload.');
@@ -65,22 +59,35 @@ export class FileUploadComponent implements OnInit {
       error: (err) => {
         this.errorMessage = 'Failed to fetch files.';
         console.error(err);
-      }
+      },
     });
   }
 
+  
 
-  openSharePopup() {
+  openSharePopup(url: string) {
+    console.log('URL passed to dialog:', url); 
     const dialogRef = this.dialog.open(SharePopupComponent, {
-      width: '400px', 
+      width: '400px',
+      data:{sharableUrl:url},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       console.log('Dialog closed', result);
     });
   }
+  generateSharableLink(fileId: string): void {
+
+// this.popup.show(FormLayoutComponent,)
+
+    this.fileService.generateSharableLink(fileId).subscribe({
+      next: (url) => {
+        this.openSharePopup(url); 
+      },
+      error: (err) => {
+        alert('Failed to generate sharable link.');
+        console.error(err);
+      },
+    });
 }
-
-
-
-
+}

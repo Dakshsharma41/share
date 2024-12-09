@@ -9,8 +9,11 @@ export class FileService {
  
   private uploadUrl = 'http://localhost:8080/file/upload';
   private fetchFilesUrl = 'http://localhost:8080/file/list';
+  private sharableLinkUrl='http://localhost:8080/file/generate-link?fileId=';
+
 
   constructor(private http: HttpClient) {}
+
 
   uploadFile(file: File): Observable<any> {
     const formData = new FormData();
@@ -21,4 +24,16 @@ export class FileService {
   getAllFiles(): Observable<any[]> {
     return this.http.get<any[]>(this.fetchFilesUrl);
   }
-}
+
+  generateSharableLink(fileId:string):Observable<any>{
+    
+    const url = this.sharableLinkUrl + encodeURIComponent(fileId); 
+    return this.http.get<any>(url,{responseType: 'text' as 'json'});
+  }
+  shareFile(shareData: { users: string[]; message: string; link: string }) {
+    return this.http.post('/api/files/share', shareData);
+  }
+  }
+
+
+

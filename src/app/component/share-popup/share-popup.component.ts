@@ -1,61 +1,58 @@
 import { UserService } from './../../user.service';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-
-
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FileService } from '../../file.service';
 
 @Component({
   selector: 'app-share-popup',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './share-popup.component.html',
-  styleUrl: './share-popup.component.css'
+  styleUrl: './share-popup.component.css',
 })
 export class SharePopupComponent implements OnInit {
-
-  
-
-  
-  
-  selectedUsers: string[] = []; 
+  selectedUsers: string[] = [];
   newUser: string = '';
-  message: string = ''; 
+  message: string = '';
   suggestedUsers: string[] = [];
   allUsers: string[] = [];
+  sharableUrl:string ='';
 
-  constructor(private dialogRef: MatDialogRef<SharePopupComponent>,
-    private userService: UserService) {}
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { sharableUrl: string },
+    private dialogRef: MatDialogRef<SharePopupComponent>,
+    private userService: UserService,
+    private fileService: FileService
+  ) {}
 
   ngOnInit() {
-    
     this.userService.getUsers().subscribe({
       next: (users) => {
-        
         this.allUsers = users
-          .map(user => {
-            
-            const displayName = user.name  || '';
-            return displayName.trim(); 
+          .map((user) => {
+            const displayName = user.name || '';
+            return displayName.trim();
           })
-          .filter(name => name !== ''); 
+          .filter((name) => name !== '');
       },
       error: (error) => {
         console.error('Error fetching users:', error);
-      }
+      },
     });
   }
 
   onUserInput() {
     if (this.newUser.trim()) {
-      
       this.suggestedUsers = this.allUsers
-        .filter(user => 
-          user.toLowerCase().includes(this.newUser.toLowerCase()) && 
-          !this.selectedUsers.includes(user)
+        .filter(
+          (user) =>
+            user.toLowerCase().includes(this.newUser.toLowerCase()) &&
+            !this.selectedUsers.includes(user)
         )
-        .slice(0, 5); 
+        .slice(0, 5);
     } else {
       this.suggestedUsers = [];
     }
@@ -64,7 +61,7 @@ export class SharePopupComponent implements OnInit {
   addUser() {
     if (this.newUser.trim()) {
       this.selectedUsers.push(this.newUser.trim());
-      this.newUser = ''; 
+      this.newUser = '';
       this.suggestedUsers = [];
     }
   }
@@ -78,16 +75,35 @@ export class SharePopupComponent implements OnInit {
     this.newUser = '';
     this.suggestedUsers = [];
   }
- 
+
   send() {
-    console.log('Sharing:', {
+    if (this.selectedUsers.length === 0) {
+      alert('Please select at least one user to share the link.');
+      return;
+    }
+  
+    const shareData = {
       users: this.selectedUsers,
-      message: this.message
+      message: this.message,
+      link: this.data.sharableUrl,
+    };
+    console.log('Sharing Data:', shareData);
+  
+    this.fileService.shareFile(shareData).subscribe({
+      next: (response) => {
+        alert('Shared successfully!');
+        this.dialogRef.close();
+      },
+      error: (err) => {
+        console.error('Error sharing file:', err);
+        alert('Failed to share the file.');
+      },
     });
-    alert('Shared successfully with: ' + this.selectedUsers.join(', '));
   }
   close() {
-    this.dialogRef.close(); // Close without action
+    this.dialogRef.close();
   }
 
+
+  
 }

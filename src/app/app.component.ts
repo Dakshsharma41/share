@@ -1,6 +1,7 @@
 
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { PopupComponent } from '@taomish/common-lib';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,6 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'share';
+
+  
 }
