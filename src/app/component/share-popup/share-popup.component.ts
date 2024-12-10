@@ -19,6 +19,7 @@ export class SharePopupComponent implements OnInit {
   suggestedUsers: string[] = [];
   allUsers: string[] = [];
   sharableUrl:string ='';
+  passcode: string = '';
 
 
   constructor(
@@ -29,6 +30,7 @@ export class SharePopupComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.generatePasscode();
     this.userService.getUsers().subscribe({
       next: (users) => {
         this.allUsers = users
@@ -42,6 +44,9 @@ export class SharePopupComponent implements OnInit {
         console.error('Error fetching users:', error);
       },
     });
+  }
+  generatePasscode() {
+    this.passcode = Math.random().toString(36).slice(2, 10).toUpperCase(); 
   }
 
   onUserInput() {
@@ -81,11 +86,15 @@ export class SharePopupComponent implements OnInit {
       alert('Please select at least one user to share the link.');
       return;
     }
+    if (!this.passcode) {
+      this.generatePasscode();
+  }
   
     const shareData = {
       users: this.selectedUsers,
       message: this.message,
       link: this.data.sharableUrl,
+      passcode: this.passcode
     };
     console.log('Sharing Data:', shareData);
   

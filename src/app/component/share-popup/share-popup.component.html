@@ -27,6 +27,19 @@
     </ul>
     }
   </div>
+  <div class="passcode-container">
+    <label for="passcode">Generated Passcode:</label>
+    <div class="passcode-display">
+      <input
+        type="text"
+        id="passcode"
+        [value]="passcode"
+        readonly
+        class="passcode-input"
+      />
+      
+    </div>
+  </div>
 
   <textarea
     class="message-input"
